@@ -19,6 +19,7 @@ class Shelves extends React.Component {
             name={shelf.name}
             books={this.props.books.filter((book) => (book.shelf === shelf.id))}
             shelfList={shelfList}
+            moveBook={this.props.moveBook}
           />
         ))}
         <Link to="/search">Search books</Link>

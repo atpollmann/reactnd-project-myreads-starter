@@ -10,6 +10,17 @@ class BooksApp extends Component {
     books: []
   }
   
+  moveBook = (book, shelfId) => {
+    this.setState({
+      books: this.state.books.map(function(b) {
+        if(b.id === book.id) {
+          b.shelf = shelfId
+        }
+        return b;
+      })
+    })
+  }
+  
   componentDidMount() {
     BooksAPI.getAll().then((books) => {
       this.setState({books})
@@ -22,6 +33,7 @@ class BooksApp extends Component {
         <Route exact path="/" render={() => (
             <Shelves
               books={this.state.books}
+              moveBook={this.moveBook}
             />
           )
         } />

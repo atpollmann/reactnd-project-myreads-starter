@@ -15,6 +15,7 @@ class Shelf extends Component {
             <BookControl
               shelfList={this.props.shelfList}
               book={book}
+              moveBook={this.props.moveBook}
             />
           </div>
         ))}
