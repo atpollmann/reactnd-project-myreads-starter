@@ -4,21 +4,22 @@ import Shelf from './Shelf'
 
 class Shelves extends React.Component {
   
-  render() {
-    const shelfList = [
+  static getShelfList() {
+    return [
       { id: "currentlyReading", name: "Currently reading" },
       { id: "wantToRead", name: "Want to Read" },
       { id: "read", name: "Read" },
     ]
-    
+  }
+  
+  render() {
     return (
       <div>
-        {shelfList.map((shelf) => (
+        {Shelves.getShelfList().map((shelf) => (
           <Shelf
             key={shelf.id}
             name={shelf.name}
             books={this.props.books.filter((book) => (book.shelf === shelf.id))}
-            shelfList={shelfList}
             moveBook={this.props.moveBook}
           />
         ))}

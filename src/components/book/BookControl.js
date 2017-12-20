@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Shelves from "../shelf/Shelves"
 
 class BookControl extends Component {
   
@@ -22,7 +23,7 @@ class BookControl extends Component {
           onChange={this.moveBook}
         >
           <option value="none" disabled>Move to...</option>
-          {this.props.shelfList.map((shelf, index) => (
+          {Shelves.getShelfList().map((shelf, index) => (
             <option
               key={index}
               value={shelf.id}
