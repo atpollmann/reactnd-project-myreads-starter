@@ -10,7 +10,7 @@ class Book extends Component {
       <div key={book.id}>
         <img src={book.imageLinks.smallThumbnail} alt={book.name}/>
         <p>{book.title}</p>
-        <small>{book.authors || book.authors.toString()}</small>
+        <small>{book.authors && book.authors.toString()}</small>
         <BookControl
           book={book}
           moveBook={moveBook}

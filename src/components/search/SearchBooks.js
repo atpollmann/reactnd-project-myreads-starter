@@ -14,7 +14,15 @@ class SearchBooks extends React.Component {
   doSearch() {
     BooksAPI.search(this.state.query).then(books => {
       if(!books.error) {
-        this.setState({books})
+        this.setState({
+          books: books.map(book => {
+            const myBook = this.props.myBooks.filter(myBook => myBook.id === book.id)
+            if(myBook[0]) {
+              book.shelf = myBook[0].shelf
+            }
+            return book
+          })
+        })
       } else {
         this.clearBooks()
       }

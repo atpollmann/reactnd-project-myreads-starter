@@ -4,7 +4,7 @@ import Shelves from "../shelf/Shelves"
 class BookControl extends Component {
   
   state = {
-    shelf: this.props.book.shelf
+    shelf: this.props.book.shelf || "none"
   }
   
   moveBook = (e) => {

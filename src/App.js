@@ -13,13 +13,27 @@ class BooksApp extends Component {
   moveBook = (book, shelfId) => {
     BooksAPI.update(book, shelfId).then(
       () => {
-        this.setState({
-          books: this.state.books.map(function(b) {
+        const myBook = this.state.books.filter(b => {
+          return b.id === book.id
+        })
+        
+        let newState = []
+        
+        if(myBook.length === 0) {
+          book.shelf = shelfId
+          newState = this.state.books.concat(book);
+          
+        } else {
+          newState = this.state.books.map(function(b) {
             if(b.id === book.id) {
               b.shelf = shelfId
             }
             return b;
           })
+        }
+        
+        this.setState({
+          books: newState
         })
       }
     )
@@ -43,6 +57,7 @@ class BooksApp extends Component {
         } />
         <Route path="/search" render={() => (
           <SearchBooks
+            myBooks={this.state.books}
             moveBook={this.moveBook}
           />
         )} />
