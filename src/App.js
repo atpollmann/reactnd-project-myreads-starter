@@ -11,14 +11,18 @@ class BooksApp extends Component {
   }
   
   moveBook = (book, shelfId) => {
-    this.setState({
-      books: this.state.books.map(function(b) {
-        if(b.id === book.id) {
-          b.shelf = shelfId
-        }
-        return b;
-      })
-    })
+    BooksAPI.update(book, shelfId).then(
+      () => {
+        this.setState({
+          books: this.state.books.map(function(b) {
+            if(b.id === book.id) {
+              b.shelf = shelfId
+            }
+            return b;
+          })
+        })
+      }
+    )
   }
   
   componentDidMount() {
