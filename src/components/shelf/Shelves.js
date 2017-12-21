@@ -1,6 +1,22 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import Shelf from './Shelf'
+
+import { withStyles } from 'material-ui/styles'
+import AppBar from 'material-ui/AppBar'
+import Toolbar from 'material-ui/Toolbar'
+import Typography from 'material-ui/Typography'
+import Button from 'material-ui/Button'
+import AddIcon from 'material-ui-icons/Add'
+
+const styles = theme => ({
+  addBook: {
+    margin: theme.spacing.unit,
+    color: "white"
+  },
+  flex: {
+    flex: 1
+  }
+})
 
 class Shelves extends React.Component {
   
@@ -13,8 +29,28 @@ class Shelves extends React.Component {
   }
   
   render() {
+    
+    const { classes } = this.props
+  
     return (
-      <div>
+      <div className={classes.root}>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography type="title" color="inherit" className={classes.flex}>
+              My Reads
+            </Typography>
+            <Button
+              fab
+              color="accent"
+              aria-label="Search for books"
+              className={classes.addBook}
+              href="/search"
+              title="Search for books"
+            >
+              <AddIcon/>
+            </Button>
+          </Toolbar>
+        </AppBar>
         {Shelves.getShelfList().map((shelf) => (
           <Shelf
             key={shelf.id}
@@ -23,10 +59,9 @@ class Shelves extends React.Component {
             moveBook={this.props.moveBook}
           />
         ))}
-        <Link to="/search">Search books</Link>
       </div>
     )
   }
 }
 
-export default Shelves
+export default withStyles(styles)(Shelves)
