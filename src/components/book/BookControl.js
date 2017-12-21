@@ -1,40 +1,88 @@
 import React, { Component } from 'react'
+import { withStyles } from 'material-ui/styles'
 import Shelves from "../shelf/Shelves"
+import Button from 'material-ui/Button'
+import Menu, { MenuItem } from 'material-ui/Menu'
+import KeyboardArrowDown from 'material-ui-icons/KeyboardArrowDown'
+
+const styles = theme => ({
+  selectedItem: {
+    background: theme.palette.primary['A400']
+  }
+})
 
 class BookControl extends Component {
   
   state = {
-    shelf: this.props.book.shelf || "none"
+    shelf: Shelves.getShelf(this.props.book.shelf) || "none",
+    anchorEl: null,
+    open: false
   }
   
-  moveBook = (e) => {
+  moveBook = e => {
     this.setState({
-      shelf: e.target.value
+      shelf: Shelves.getShelf(e.target.value)
     })
     this.props.moveBook(this.props.book, e.target.value)
   }
   
+  handleClick = e => {
+    this.setState({
+      open: true,
+      anchorEl: e.currentTarget
+    })
+  }
+  
+  handleClose = e => {
+    const shelfId = e.target.getAttribute('value');
+    if(shelfId) {
+      this.setState({
+        shelf: Shelves.getShelf(shelfId)
+      })
+      this.props.moveBook(this.props.book, shelfId)
+    }
+    this.setState({
+      open: false
+    })
+  
+  }
+  
   render() {
+    
+    const { shelf, open, anchorEl } = this.state
+    
     return (
       <div>
-        <select
-          name="shelve"
-          value={this.state.shelf}
-          onChange={this.moveBook}
+        <Button
+          fab
+          mini
+          color="accent"
+          onClick={this.handleClick}
         >
-          <option value="none" disabled>Move to...</option>
-          {Shelves.getShelfList().map((shelf, index) => (
-            <option
-              key={index}
-              value={shelf.id}
-            >{shelf.name}</option>
+          <KeyboardArrowDown/>
+        </Button>
+        <Menu
+          anchorEl={anchorEl}
+          open={open}
+          onClose={this.handleClose}
+        >
+          <MenuItem disabled>Move to...</MenuItem>
+          {Shelves.getShelfList().map(_shelf => (
+            <MenuItem
+              key={_shelf.id}
+              value={_shelf.id}
+              onClick={this.handleClose}
+              selected={shelf ? _shelf.id === shelf.id : false}
+            >
+              {_shelf.name}
+            </MenuItem>
           ))}
-          <option value="none">none</option>
-        </select>
+          <MenuItem key="none" value="none" onClick={this.handleClose}>none</MenuItem>
+        </Menu>
       </div>
     )
   }
   
 }
 
-export default BookControl
+export default withStyles(styles)(BookControl)
