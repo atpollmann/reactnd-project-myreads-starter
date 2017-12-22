@@ -22,7 +22,7 @@ const styles = theme => ({
 class Book extends Component {
   render() {
     
-    const { book, moveBook } = this.props
+    const { book } = this.props
     const { classes } = this.props
     
     return (
@@ -37,7 +37,7 @@ class Book extends Component {
         <Typography gutterBottom type="caption">{book.authors && book.authors.toString()}</Typography>
         <BookControl
           book={book}
-          moveBook={moveBook}
+          updateLibrary={this.props.updateLibrary}
         />
       </Paper>
     )

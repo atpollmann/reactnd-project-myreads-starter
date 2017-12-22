@@ -10,33 +10,28 @@ class BooksApp extends Component {
     books: []
   }
   
-  moveBook = (book, shelfId) => {
-    BooksAPI.update(book, shelfId).then(
-      () => {
-        const myBook = this.state.books.filter(b => {
-          return b.id === book.id
-        })
-        
-        let newState = []
-        
-        if(myBook.length === 0) {
-          book.shelf = shelfId
-          newState = this.state.books.concat(book);
-          
-        } else {
-          newState = this.state.books.map(function(b) {
-            if(b.id === book.id) {
-              b.shelf = shelfId
-            }
-            return b;
-          })
+  updateLibrary = (book, shelfId) => {
+    const myBook = this.state.books.filter(b => b.id === book.id)
+  
+    let newState = []
+  
+    if(myBook.length === 0) {
+      book.shelf = shelfId
+      newState = this.state.books.concat(book);
+    
+    } else {
+      newState = this.state.books.map(function(b) {
+        if(b.id === book.id) {
+          b.shelf = shelfId
         }
-        
-        this.setState({
-          books: newState
-        })
-      }
-    )
+        return b;
+      })
+    }
+  
+    this.setState({
+      books: newState
+    })
+    
   }
   
   componentDidMount() {
@@ -51,14 +46,14 @@ class BooksApp extends Component {
         <Route exact path="/" render={() => (
             <Shelves
               books={this.state.books}
-              moveBook={this.moveBook}
+              updateLibrary={this.updateLibrary}
             />
           )
         } />
         <Route path="/search" render={() => (
           <SearchBooks
             myBooks={this.state.books}
-            moveBook={this.moveBook}
+            updateLibrary={this.updateLibrary}
           />
         )} />
       </div>

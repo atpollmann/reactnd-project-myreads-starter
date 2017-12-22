@@ -1,13 +1,23 @@
 import React, { Component } from 'react'
+import * as BooksAPI from '../../utils/BooksAPI'
 import { withStyles } from 'material-ui/styles'
 import Shelves from "../shelf/Shelves"
 import Button from 'material-ui/Button'
 import Menu, { MenuItem } from 'material-ui/Menu'
 import KeyboardArrowDown from 'material-ui-icons/KeyboardArrowDown'
+import { CircularProgress } from 'material-ui/Progress'
 
 const styles = theme => ({
-  selectedItem: {
-    background: theme.palette.primary['A400']
+  wrapper: {
+    margin: theme.spacing.unit,
+    position: 'relative',
+  },
+  fabProgress: {
+    color: theme.palette.primary,
+    position: 'absolute',
+    top: -5,
+    left: 67,
+    zIndex: 1,
   }
 })
 
@@ -16,14 +26,8 @@ class BookControl extends Component {
   state = {
     shelf: Shelves.getShelf(this.props.book.shelf) || "none",
     anchorEl: null,
-    open: false
-  }
-  
-  moveBook = e => {
-    this.setState({
-      shelf: Shelves.getShelf(e.target.value)
-    })
-    this.props.moveBook(this.props.book, e.target.value)
+    open: false,
+    loading: false
   }
   
   handleClick = e => {
@@ -35,32 +39,39 @@ class BookControl extends Component {
   
   handleClose = e => {
     const shelfId = e.target.getAttribute('value');
-    if(shelfId) {
-      this.setState({
-        shelf: Shelves.getShelf(shelfId)
-      })
-      this.props.moveBook(this.props.book, shelfId)
-    }
     this.setState({
-      open: false
+      open: false,
+      loading: true
     })
-  
+    if(shelfId) {
+      BooksAPI.update(this.props.book, shelfId).then(() => {
+        this.setState({
+          loading: false,
+          shelf: Shelves.getShelf(shelfId)
+        })
+        this.props.updateLibrary(this.props.book, shelfId)
+      })
+    }
   }
   
   render() {
     
-    const { shelf, open, anchorEl } = this.state
+    const { shelf, open, anchorEl, loading } = this.state
+    const { classes } = this.props
     
     return (
       <div>
-        <Button
-          fab
-          mini
-          color="accent"
-          onClick={this.handleClick}
-        >
-          <KeyboardArrowDown/>
-        </Button>
+        <div className={classes.wrapper}>
+          <Button
+            fab
+            mini
+            color="accent"
+            onClick={this.handleClick}
+          >
+            <KeyboardArrowDown/>
+          </Button>
+          {loading && <CircularProgress size={50} className={classes.fabProgress} />}
+        </div>
         <Menu
           anchorEl={anchorEl}
           open={open}
@@ -82,7 +93,6 @@ class BookControl extends Component {
       </div>
     )
   }
-  
 }
 
 export default withStyles(styles)(BookControl)

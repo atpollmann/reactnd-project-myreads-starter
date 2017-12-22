@@ -71,6 +71,7 @@ class SearchBooks extends React.Component {
             key={book.id}
             book={book}
             moveBook={moveBook}
+            updateLibrary={this.props.updateLibrary}
           />
         ))}
         

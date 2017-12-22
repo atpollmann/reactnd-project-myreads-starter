@@ -70,7 +70,7 @@ class Shelves extends React.Component {
               key={shelf.id}
               name={shelf.name}
               books={this.props.books.filter((book) => (book.shelf === shelf.id))}
-              moveBook={this.props.moveBook}
+              updateLibrary={this.props.updateLibrary}
             />
           ))}
         </div>

@@ -30,7 +30,7 @@ class Shelf extends Component {
             <Grid key={book.id} item>
               <Book
                 book={book}
-                moveBook={this.props.moveBook}
+                updateLibrary={this.props.updateLibrary}
               />
             </Grid>
           ))}
