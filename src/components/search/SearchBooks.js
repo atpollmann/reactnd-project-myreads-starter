@@ -10,10 +10,18 @@ import Toolbar from 'material-ui/Toolbar'
 import IconButton from 'material-ui/IconButton'
 import ArrowBack from 'material-ui-icons/ArrowBack'
 import Tooltip from 'material-ui/Tooltip'
+import { LinearProgress } from 'material-ui/Progress'
 
 const styles = (theme) => ({
   grid: {
     marginTop: 100
+  },
+  progressContainer: {
+    marginLeft: -8,
+    zIndex: 2000,
+    position: "fixed",
+    top: 0,
+    width: "100%"
   }
 })
 
@@ -21,10 +29,12 @@ class SearchBooks extends React.Component {
   
   state = {
     query: '',
-    books: []
+    books: [],
+    loading: false
   }
   
   doSearch() {
+    this.setState({loading: true})
     BooksAPI.search(this.state.query).then(books => {
       if(!books.error) {
         this.setState({
@@ -34,7 +44,8 @@ class SearchBooks extends React.Component {
               book.shelf = myBook[0].shelf
             }
             return book
-          })
+          }),
+          loading: false
         })
       } else {
         this.clearBooks()
@@ -62,18 +73,19 @@ class SearchBooks extends React.Component {
   
   render() {
     
-    const { books } = this.state
+    const { books, loading } = this.state
     const { moveBook, classes } = this.props
     
     return (
       <div>
+        <div className={classes.progressContainer} hidden={!loading}>
+          <LinearProgress mode="indeterminate" color="accent" />
+        </div>
         <AppBar color="inherit">
           <Toolbar>
             <Route render={({ history }) => (
               <Tooltip title="Go back" placement="bottom">
-                <IconButton
-                  onClick={() => history.goBack()}
-                >
+                <IconButton onClick={() => history.goBack()}>
                   <ArrowBack/>
                 </IconButton>
               </Tooltip>
@@ -106,21 +118,6 @@ class SearchBooks extends React.Component {
             </Grid>
           ))}
         </Grid>
-        
-        {/*<Grid
-          container
-          justify="center"
-          spacing={Number(16)}
-        >
-          {this.props.books.map((book) => (
-            <Grid key={book.id} item>
-              <Book
-                book={book}
-                updateLibrary={this.props.updateLibrary}
-              />
-            </Grid>
-          ))}
-        </Grid>*/}
       </div>
     )
   }

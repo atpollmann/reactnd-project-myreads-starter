@@ -53,7 +53,6 @@ class Shelves extends React.Component {
             <Typography type="title" color="inherit" className={classes.title}>
               My Reads
             </Typography>
-            
               <Route render={({ history }) => (
                 <Tooltip title="Search more books" placement="left">
                   <IconButton
@@ -64,7 +63,6 @@ class Shelves extends React.Component {
                   </IconButton>
                 </Tooltip>
               )} />
-            
           </Toolbar>
         </AppBar>
         <div className={classes.shelves}>
