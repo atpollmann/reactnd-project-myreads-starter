@@ -3,22 +3,40 @@ import { Route } from 'react-router-dom'
 import SearchBooks from './components/search/SearchBooks'
 import * as BooksAPI from './utils/BooksAPI'
 import Shelves from "./components/shelf/Shelves"
+import SnackBar from 'material-ui/Snackbar'
 
 class BooksApp extends Component {
   
   state = {
-    books: []
+    books: [],
+    snackOpen: false,
+    snackMsg: ''
+  }
+  
+  _showSnack(msg) {
+    this.setState({
+      snackOpen: true,
+      snackMsg: msg
+    })
+  }
+  
+  _hideSnack = () => {
+    this.setState({
+      snackOpen: false
+    })
   }
   
   updateLibrary = (book, shelfId) => {
     const myBook = this.state.books.filter(b => b.id === book.id)
   
     let newState = []
-  
+    let msg, verb = ""
+    let shelfName = Shelves.getShelf(shelfId).name
+    
     if(myBook.length === 0) {
       book.shelf = shelfId
       newState = this.state.books.concat(book);
-    
+      verb = 'added'
     } else {
       newState = this.state.books.map(function(b) {
         if(b.id === book.id) {
@@ -26,8 +44,9 @@ class BooksApp extends Component {
         }
         return b;
       })
+      verb = 'moved'
     }
-  
+    this._showSnack(`Book ${verb} to shelf ${shelfName}`)
     this.setState({
       books: newState
     })
@@ -41,6 +60,9 @@ class BooksApp extends Component {
   }
   
   render() {
+    
+    const { snackOpen, snackMsg } = this.state
+    
     return (
       <div>
         <Route exact path="/" render={() => (
@@ -51,10 +73,18 @@ class BooksApp extends Component {
           )
         } />
         <Route path="/search" render={() => (
-          <SearchBooks
-            myBooks={this.state.books}
-            updateLibrary={this.updateLibrary}
-          />
+          <div>
+            <SearchBooks
+              myBooks={this.state.books}
+              updateLibrary={this.updateLibrary}
+            />
+            <SnackBar
+              anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
+              open={snackOpen}
+              onClose={this._hideSnack}
+              message={snackMsg}
+              />
+          </div>
         )} />
       </div>
     )
