@@ -15,7 +15,8 @@ const styles = theme => ({
   },
   img: {
     width: 128,
-    height: 163
+    height: 163,
+    border: "1px solid #ddd"
   }
 })
 
@@ -32,7 +33,10 @@ class Book extends Component {
     return (
       <Paper key={book.id} className={classes.paper}>
         <Img
-          src={book.imageLinks.smallThumbnail}
+          src={[
+            (book.imageLinks && book.imageLinks.smallThumbnail),
+            'cover_placeholder.png'
+          ]}
           alt={book.name}
           className={classes.img}
           loader={<CircularProgress color="accent"/>}
