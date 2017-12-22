@@ -24,7 +24,9 @@ class Book extends Component {
     
     const { book } = this.props
     const { classes } = this.props
-    const authors = book.authors && book.authors.reduce((acc, val) => (acc + ', ' + val))
+    const authors = (book.authors && book.authors.reduce(
+      (acc, val) => (acc + ', ' + val))
+    ) || '(Authors missing)'
     
     
     return (
