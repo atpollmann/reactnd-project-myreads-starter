@@ -9,7 +9,6 @@ import AddCircle from 'material-ui-icons/AddCircle'
 import Tooltip from 'material-ui/Tooltip'
 import IconButton from 'material-ui/IconButton'
 
-
 const styles = theme => ({
   gridContainer: {
     flexGrow: 1
@@ -34,7 +33,7 @@ class Shelves extends React.Component {
     return [
       { id: "currentlyReading", name: "Currently reading" },
       { id: "wantToRead", name: "Want to Read" },
-      { id: "read", name: "Read" },
+      { id: "read", name: "Read" }
     ]
   }
   

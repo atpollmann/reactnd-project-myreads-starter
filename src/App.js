@@ -30,8 +30,9 @@ class BooksApp extends Component {
     const myBook = this.state.books.filter(b => b.id === book.id)
   
     let newState = []
-    let verb = ""
-    let shelfName = Shelves.getShelf(shelfId).name
+    let verb, msg = ""
+    let shelf = Shelves.getShelf(shelfId)
+    let shelfName = shelf ? shelf.name : 'none'
     
     if(myBook.length === 0) {
       book.shelf = shelfId
@@ -46,10 +47,14 @@ class BooksApp extends Component {
       })
       verb = 'moved'
     }
-    this._showSnack(`Book ${verb} to shelf '${shelfName}'`)
+    if(shelfName === 'none') {
+      msg = 'Book removed from your library'
+    } else {
+      msg = `Book ${verb} to shelf '${shelfName}'`
+    }
     this.setState({
       books: newState
-    })
+    }, () => this._showSnack(msg))
     
   }
   
