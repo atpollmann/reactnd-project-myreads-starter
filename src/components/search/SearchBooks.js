@@ -4,14 +4,18 @@ import * as BooksAPI from '../../utils/BooksAPI'
 import Book from '../book/Book'
 import { withStyles } from 'material-ui/styles'
 import AppBar from 'material-ui/AppBar'
+import Grid from 'material-ui/Grid'
 import TextField from 'material-ui/TextField'
 import Toolbar from 'material-ui/Toolbar'
 import IconButton from 'material-ui/IconButton'
 import ArrowBack from 'material-ui-icons/ArrowBack'
+import Tooltip from 'material-ui/Tooltip'
 
-const styles = (theme) => {
-
-}
+const styles = (theme) => ({
+  grid: {
+    marginTop: 100
+  }
+})
 
 class SearchBooks extends React.Component {
   
@@ -58,19 +62,21 @@ class SearchBooks extends React.Component {
   
   render() {
     
-    const {query, books} = this.state
-    const {moveBook} = this.props
+    const { books } = this.state
+    const { moveBook, classes } = this.props
     
     return (
       <div>
         <AppBar color="inherit">
           <Toolbar>
             <Route render={({ history }) => (
-              <IconButton
-                onClick={() => history.goBack()}
-              >
-                <ArrowBack/>
-              </IconButton>
+              <Tooltip title="Go back" placement="bottom">
+                <IconButton
+                  onClick={() => history.goBack()}
+                >
+                  <ArrowBack/>
+                </IconButton>
+              </Tooltip>
             )} />
             <TextField
               fullWidth
@@ -83,15 +89,38 @@ class SearchBooks extends React.Component {
             />
           </Toolbar>
         </AppBar>
-        {books.map(book => (
-          <Book
-            key={book.id}
-            book={book}
-            moveBook={moveBook}
-            updateLibrary={this.props.updateLibrary}
-          />
-        ))}
         
+        <Grid
+          container
+          justify='center'
+          spacing={Number(16)}
+          className={classes.grid}
+        >
+          {books.map(book => (
+            <Grid key={book.id} item>
+              <Book
+                book={book}
+                moveBook={moveBook}
+                updateLibrary={this.props.updateLibrary}
+              />
+            </Grid>
+          ))}
+        </Grid>
+        
+        {/*<Grid
+          container
+          justify="center"
+          spacing={Number(16)}
+        >
+          {this.props.books.map((book) => (
+            <Grid key={book.id} item>
+              <Book
+                book={book}
+                updateLibrary={this.props.updateLibrary}
+              />
+            </Grid>
+          ))}
+        </Grid>*/}
       </div>
     )
   }

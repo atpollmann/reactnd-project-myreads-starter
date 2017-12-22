@@ -53,16 +53,18 @@ class Shelves extends React.Component {
             <Typography type="title" color="inherit" className={classes.title}>
               My Reads
             </Typography>
-            <Tooltip title="Search more books" placement="bottom">
+            
               <Route render={({ history }) => (
-                <IconButton
-                  onClick={() => history.push('/search')}
-                  color="inherit"
-                >
-                  <AddCircle/>
-                </IconButton>
+                <Tooltip title="Search more books" placement="left">
+                  <IconButton
+                    onClick={() => history.push('/search')}
+                    color="inherit"
+                  >
+                    <AddCircle/>
+                  </IconButton>
+                </Tooltip>
               )} />
-            </Tooltip>
+            
           </Toolbar>
         </AppBar>
         <div className={classes.shelves}>
