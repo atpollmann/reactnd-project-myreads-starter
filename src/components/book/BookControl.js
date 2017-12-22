@@ -39,11 +39,9 @@ class BookControl extends Component {
   
   handleClose = e => {
     const shelfId = e.target.getAttribute('value');
-    this.setState({
-      open: false,
-      loading: true
-    })
+    this.setState({ open: false })
     if(shelfId) {
+      this.setState({ loading: true })
       BooksAPI.update(this.props.book, shelfId).then(() => {
         this.setState({
           loading: false,
