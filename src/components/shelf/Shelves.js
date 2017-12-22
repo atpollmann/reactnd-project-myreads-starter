@@ -1,6 +1,6 @@
 import React from 'react'
 import Shelf from './Shelf'
-
+import { Route } from 'react-router-dom'
 import { withStyles } from 'material-ui/styles'
 import AppBar from 'material-ui/AppBar'
 import Toolbar from 'material-ui/Toolbar'
@@ -54,13 +54,14 @@ class Shelves extends React.Component {
               My Reads
             </Typography>
             <Tooltip title="Search more books" placement="bottom">
-              <IconButton
-                href="/search"
-                color="inherit"
-              >
-                <AddCircle/>
-              </IconButton>
-              
+              <Route render={({ history }) => (
+                <IconButton
+                  onClick={() => history.push('/search')}
+                  color="inherit"
+                >
+                  <AddCircle/>
+                </IconButton>
+              )} />
             </Tooltip>
           </Toolbar>
         </AppBar>
