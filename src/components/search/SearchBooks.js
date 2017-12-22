@@ -7,6 +7,7 @@ import AppBar from 'material-ui/AppBar'
 import Grid from 'material-ui/Grid'
 import TextField from 'material-ui/TextField'
 import Toolbar from 'material-ui/Toolbar'
+import Typography from 'material-ui/Typography'
 import IconButton from 'material-ui/IconButton'
 import ArrowBack from 'material-ui-icons/ArrowBack'
 import Tooltip from 'material-ui/Tooltip'
@@ -22,6 +23,10 @@ const styles = (theme) => ({
     position: "fixed",
     top: 0,
     width: "100%"
+  },
+  noBooks: {
+    marginTop: 100,
+    textAlign: "center"
   }
 })
 
@@ -31,7 +36,8 @@ class SearchBooks extends React.Component {
     query: '',
     books: [],
     loading: false,
-    debounce: 0
+    debounce: 0,
+    foundBooks: true
   }
   
   debounce = null
@@ -41,6 +47,7 @@ class SearchBooks extends React.Component {
     BooksAPI.search(this.state.query).then(books => {
       if(!books.error) {
         this.setState({
+          foundBooks: true,
           books: books.map(book => {
             const myBook = this.props.myBooks.filter(myBook => myBook.id === book.id)
             if(myBook[0]) {
@@ -52,12 +59,15 @@ class SearchBooks extends React.Component {
         })
       } else {
         this.clearBooks()
+        this.setState({
+          foundBooks: false
+        })
       }
     })
   }
   
   clearBooks() {
-    this.setState({books:[]})
+    this.setState({books: [], loading: false, foundBooks: true})
   }
   
   updateQuery = (query) => {
@@ -106,7 +116,11 @@ class SearchBooks extends React.Component {
             />
           </Toolbar>
         </AppBar>
-        
+        {this.state.foundBooks ? null : (
+          <div className={classes.noBooks}>
+            <Typography type="display2" paragraph>No books found</Typography>
+          </div>
+        )}
         <Grid
           container
           justify='center'

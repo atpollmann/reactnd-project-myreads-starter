@@ -46,7 +46,7 @@ class BooksApp extends Component {
       })
       verb = 'moved'
     }
-    this._showSnack(`Book ${verb} to shelf ${shelfName}`)
+    this._showSnack(`Book ${verb} to shelf '${shelfName}'`)
     this.setState({
       books: newState
     })
