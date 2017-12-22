@@ -30,7 +30,7 @@ class BooksApp extends Component {
     const myBook = this.state.books.filter(b => b.id === book.id)
   
     let newState = []
-    let msg, verb = ""
+    let verb = ""
     let shelfName = Shelves.getShelf(shelfId).name
     
     if(myBook.length === 0) {

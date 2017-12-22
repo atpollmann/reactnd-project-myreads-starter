@@ -30,8 +30,11 @@ class SearchBooks extends React.Component {
   state = {
     query: '',
     books: [],
-    loading: false
+    loading: false,
+    debounce: 0
   }
+  
+  debounce = null
   
   doSearch() {
     this.setState({loading: true})
@@ -58,16 +61,18 @@ class SearchBooks extends React.Component {
   }
   
   updateQuery = (query) => {
-    if(query.length >= 3 || query.trim() === '') {
-      setTimeout(() => {
+    if((query.length >= 3 || query.trim() === '')) {
+      clearTimeout(this.debounce)
+      this.debounce = setTimeout(() => {
         this.setState({query}, () => {
+          this.debounce = null
           if(query) {
             this.doSearch()
           } else {
             this.clearBooks()
           }
         })
-      }, 500)
+      }, 1000)
     }
   }
   
