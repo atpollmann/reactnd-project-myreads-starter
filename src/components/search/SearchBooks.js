@@ -13,7 +13,7 @@ import ArrowBack from 'material-ui-icons/ArrowBack'
 import Tooltip from 'material-ui/Tooltip'
 import { LinearProgress } from 'material-ui/Progress'
 
-const styles = (theme) => ({
+const styles = {
   grid: {
     marginTop: 100
   },
@@ -28,20 +28,37 @@ const styles = (theme) => ({
     marginTop: 100,
     textAlign: "center"
   }
-})
+}
 
+/**
+ * Displays the book search
+ * Implements a progress indicator
+ * Implements a debounced input so the
+ * app does not make unnecessary
+ * requests to the server
+ * If no books are found, shows a
+ * not found message
+ * @Component
+ */
 class SearchBooks extends React.Component {
   
   state = {
     query: '',
     books: [],
     loading: false,
-    debounce: 0,
     foundBooks: true
   }
   
+  /**
+   * A debounce timeout id
+   * @type {number | null}
+   */
   debounce = null
   
+  /**
+   * Makes the actual search of books based
+   * on the query state
+   */
   doSearch() {
     this.setState({loading: true})
     BooksAPI.search(this.state.query).then(books => {
@@ -70,6 +87,19 @@ class SearchBooks extends React.Component {
     this.setState({books: [], loading: false, foundBooks: true})
   }
   
+  /**
+   * Updates the query state and triggers
+   * the search or clear methods based on
+   * the content of the query
+   *
+   * Each time this method is called, assigns
+   * a new timeout of one second to the debounce
+   * property. When the timeout is finish then it
+   * calls the corresponding methods
+   *
+   * Allows only queries larger than 3 characters
+   * @param {string} query
+   */
   updateQuery = (query) => {
     if((query.length >= 3 || query.trim() === '')) {
       clearTimeout(this.debounce)
