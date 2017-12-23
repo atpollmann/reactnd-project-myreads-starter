@@ -21,6 +21,13 @@ const styles = theme => ({
   }
 })
 
+/**
+ * Shows the controls fot a book (adds, removes,
+ * or moves a book from shelves)
+ * Implements a progress of operation
+ * indicator
+ * @Component
+ */
 class BookControl extends Component {
   
   state = {
@@ -30,6 +37,10 @@ class BookControl extends Component {
     loading: false
   }
   
+  /**
+   * Handles the click on the control button
+   * @param e - Event object
+   */
   handleClick = e => {
     this.setState({
       open: true,
@@ -37,6 +48,11 @@ class BookControl extends Component {
     })
   }
   
+  /**
+   * Handles the dialog close and calls
+   * the book update server call
+   * @param e - Event object
+   */
   handleClose = e => {
     const shelfId = e.target.getAttribute('value');
     this.setState({ open: false })
