@@ -5,16 +5,19 @@ import Grid from 'material-ui/Grid'
 import Typography from 'material-ui/Typography'
 import Divider from 'material-ui/Divider'
 
-const styles = theme => ({
+const styles = {
   shelf: {
     marginTop: 30
   },
   divider: {
     marginBottom: 30
   }
-})
+}
 
-
+/**
+ * Displays the content of a shelf
+ * @Component
+ */
 class Shelf extends Component {
   
   render() {
