@@ -20,7 +20,16 @@ const styles = theme => ({
   }
 })
 
+/**
+ * Displays a single book
+ * If the book cover thumbnail image is
+ * not present in the server response,
+ * shows a default image (using the
+ * react-image component
+ * @Component
+ */
 class Book extends Component {
+  
   render() {
     
     const { book } = this.props
@@ -50,7 +59,6 @@ class Book extends Component {
       </Paper>
     )
   }
-  
 }
 
 export default withStyles(styles)(Book)
