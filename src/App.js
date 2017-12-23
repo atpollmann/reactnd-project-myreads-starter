@@ -23,8 +23,9 @@ class BooksApp extends Component {
    * @param {string} shelfId
    */
   updateLibrary = (book, shelfId) => {
-    if(book.shelf && (shelfId === 'none')) return this.removeBook(book)
-    else if(book.shelf) {
+    if(book.shelf && (shelfId === 'none')) {
+      return this.removeBook(book)
+    } else {
       book.shelf = shelfId
       const myBook = this.state.books.filter(b => b.id === book.id)
       myBook.length === 0 ? this.addBook(book) : this.moveBook(book, shelfId)
