@@ -5,6 +5,10 @@ import * as BooksAPI from './utils/BooksAPI'
 import Shelves from "./components/shelf/Shelves"
 import SnackBar from 'material-ui/Snackbar'
 
+/**
+ * Higher component. Start point of the application
+ * @Component
+ */
 class BooksApp extends Component {
   
   state = {
@@ -13,51 +17,64 @@ class BooksApp extends Component {
     snackMsg: ''
   }
   
-  _showSnack(msg) {
-    this.setState({
-      snackOpen: true,
-      snackMsg: msg
-    })
-  }
-  
-  _hideSnack = () => {
-    this.setState({
-      snackOpen: false
-    })
-  }
-  
+  /**
+   * Adds or moves the book from shelfs
+   * @param {Book} book
+   * @param {string} shelfId
+   */
   updateLibrary = (book, shelfId) => {
-    const myBook = this.state.books.filter(b => b.id === book.id)
-  
-    let newState = []
-    let verb, msg = ""
-    let shelf = Shelves.getShelf(shelfId)
-    let shelfName = shelf ? shelf.name : 'none'
-    
-    if(myBook.length === 0) {
+    if(book.shelf && (shelfId === 'none')) return this.removeBook(book)
+    else if(book.shelf) {
       book.shelf = shelfId
-      newState = this.state.books.concat(book);
-      verb = 'added'
-    } else {
-      newState = this.state.books.map(function(b) {
-        if(b.id === book.id) {
-          b.shelf = shelfId
-        }
-        return b;
-      })
-      verb = 'moved'
+      const myBook = this.state.books.filter(b => b.id === book.id)
+      myBook.length === 0 ? this.addBook(book) : this.moveBook(book, shelfId)
     }
-    if(shelfName === 'none') {
-      msg = 'Book removed from your library'
-    } else {
-      msg = `Book ${verb} to shelf '${shelfName}'`
-    }
-    this.setState({
-      books: newState
-    }, () => this._showSnack(msg))
-    
   }
   
+  /**
+   * @param {Book} book
+   */
+  addBook = (book) => {
+    this.setState({
+      books: this.state.books.concat(book),
+      snackMsg: 'Book added to shelf "' + Shelves.getShelf(book.shelf).name + '"',
+      snackOpen: true
+    })
+  }
+  
+  /**
+   * @param {Book} book
+   * @param {string} newShelf
+   */
+  moveBook = (book, newShelf) => {
+    this.setState({
+      books: this.state.books.map(b => {
+        if(b.id === book.id) {
+          b.shelf = newShelf
+        }
+        return b
+      }),
+      snackMsg: 'Book moved to shelf "' + Shelves.getShelf(newShelf).name + '"',
+      snackOpen: true
+    })
+  }
+  
+  /**
+   *
+   * @param {Book} book
+   */
+  removeBook = (book) => {
+    this.setState({
+      books: this.state.books.filter(b => b.id !== book.id),
+      snackMsg: 'Book removed from library',
+      snackOpen: true
+    })
+  }
+  
+  hideSnack = () => {
+    this.setState({ snackOpen: false })
+  }
+
   componentDidMount() {
     BooksAPI.getAll().then((books) => {
       this.setState({books})
@@ -86,8 +103,8 @@ class BooksApp extends Component {
             <SnackBar
               anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
               open={snackOpen}
-              onClose={this._hideSnack}
               message={snackMsg}
+              onClose={this.hideSnack}
               />
           </div>
         )} />
