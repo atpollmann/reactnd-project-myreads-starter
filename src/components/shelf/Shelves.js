@@ -27,8 +27,16 @@ const styles = theme => ({
   }
 })
 
+/**
+ * Displays the content of each shelf
+ * @Component
+ */
 class Shelves extends React.Component {
   
+  /**
+   * Shelves definition.
+   * @returns {*[]} - Array of shelf objects
+   */
   static getShelfList() {
     return [
       { id: "currentlyReading", name: "Currently reading" },
@@ -37,6 +45,11 @@ class Shelves extends React.Component {
     ]
   }
   
+  /**
+   * Given a shelf id, returns the shelf object
+   * @param shelfId
+   * @returns {*}
+   */
   static getShelf(shelfId) {
     return Shelves.getShelfList().filter(shelf => shelf.id === shelfId)[0]
   }
